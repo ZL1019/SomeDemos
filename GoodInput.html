@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="//at.alicdn.com/t/font_562334_pt5a0y89fmrnewmi.js
+"></script>
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        ul,ol{list-style: none;}
+
+        .icon {
+            width: 1.3em;
+            height: 1.5em;
+            vertical-align: -0.15em;
+            fill: #999999;
+            overflow: hidden;
+        }
+        .twobtns .icon:hover{
+            fill:#4b94fc;
+            cursor: pointer;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .wrapper{
+            display:flex;
+            position: relative;
+        }
+        .input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .twobtns {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            content: center;
+            align-items: center;
+            padding:0 10px;
+        }
+
+        .input-wrapper {
+            float: left;
+        }
+
+        .cutLine {
+            height:1em;
+            border-left: 1px #e7e7e7 solid;
+            margin:0 6px;
+        }
+
+        .input-wrapper+button {
+            float: left;
+        }
+
+        .input-wrapper input[type="text"] {
+            border: 1px #b8b8b8 solid;
+            border-right:none;
+            width: 540px;
+            height: 35px;
+            padding-left: 7px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .input-wrapper input[type=text]:focus {
+            border-color: #4b94fc;
+        }
+        .input-wrapper + button{
+            background-color:#3277ff;
+            border:none;
+            color:#fffdff;
+            padding:0 20px;
+            font-size:14px;
+        }
+        .input-wrapper + button:hover{
+            background: #317ef3;
+            box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.2)
+        }
+        .input-wrapper + button{
+            outline: none;
+        }
+        .result{
+            position: absolute;
+            top:100%;
+            left:0;
+            display: none;
+        }
+        .result.active{
+            display: block;
+        }
+        .imgPicker{
+            width:100px;
+            height:100px;
+            border-radius: 50%;
+            overflow: hidden;
+            position:absolute;
+            top:100px;left:50%;
+            margin-left:-50px;
+            display: flex;
+            justify-content: center;
+            align-items:center;
+            vertical-align: top;
+        }
+        .imgPicker:hover{
+            box-shadow: inset 0px 0px 5px 3px rgba(0,0,0,0.5)
+        }
+        .imgPicker img{
+            max-width:100%;
+            max-height:100%;
+        }
+        .imgPicker input[type=file]{
+            position:absolute;
+            top:0;left:0;
+            display: inline-block;
+            height:100%;width:100%;
+            opacity:0;
+            z-index:1;
+            /* 让他不要被.mask盖住 */
+        }
+        .mask{
+            position: absolute;
+            top:0;left:0;
+            width:100%;height:100%;
+            font-size:10px;
+            display: none;
+            justify-content: center;
+            align-items:center;
+            background:rgba(0,0,0,0.2); /*背景透明不要用opacity做 */
+        }
+        .imgPicker:hover .mask{
+            display:flex;
+            /* 出现不一定都是block，还可能是flex,inline-block */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="imgPicker">
+        <img src="https://ww1.sinaimg.cn/default/images/default_avatar_male_uploading_180.gif" alt="图片上传">
+        <input id="imgInput" type="file">
+        <div class="mask">
+            编辑
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <span class="input-wrapper">
+            <input type="text" id="keyword" autocomplete="off">
+            <span class="twobtns">
+                <svg class="icon">
+                    <use xlink:href="#icon-aui-icon-camera"></use>
+                </svg>
+                <span class="cutLine"></span>
+                <svg class="icon" style="height:1em;">
+                    <use xlink:href="#icon-mic"></use>
+                </svg>
+            </span>
+        </span>
+        <button>百度一下</button>
+    <ol class="result" id="result">
+        <li>选项1</li>
+        <li>选项2</li>
+        <li>选项3</li>
+    </ol>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        keyword.oninput = function(e){
+            if(keyword.value){
+                result.classList.add('active')
+            }else{
+                result.classList.remove('active')
+            }
+        }
+
+        imgInput.onchange=function(e){
+            let formData = new FormData()
+            formData.append('xxx',e.target.files[0]) //1.
+            console.log(e.target.files[0])
+            $.ajax({    //2.
+                url: '/yyy',
+                data: formData,
+                processData: false,
+                contentType: false,
+                type: 'POST'
+            })
+        }
+        //如果想要用户点击图片之后就上传（不需要点上传）
+        //1.获取input里面的文件
+        //2.通过AJAX上传到服务器,然后让服务器解析POST
+        //
+        //
+        /*var fd = new FormData();    
+        fd.append( 'file', input.files[0] );
+
+        $.ajax({
+        url: 'http://example.com/script.php',
+        data: fd,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function(data){
+            alert(data);
+        }
+        });*/
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>buttons</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        body{
+            height:100vh;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .button1{
+            cursor: pointer;
+            border:none;
+            background:none;
+            display:inline-block;
+            height:36px;
+            padding:0 16px;
+            border-radius: 3px;
+            box-sizing: border-box;
+            transition: all .5s;
+            position:relative;
+            overflow: hidden;
+            z-index:1;
+            /*让其不被absolute定位的circle挡住*/
+
+            line-height: 36px;
+            text-decoration: none;
+            /*防止别人用a标签当按钮*/
+        }
+        .button1:hover{
+            background:#e5e5e5;
+        }
+        .button1:focus{
+            outline: none;
+            background:#e5e5e5;
+            /*防止用户TAB键选中了按钮但是看不见*/
+        }
+        .circle{
+            width:10px;height:10px;
+            position:absolute;
+            top:50%;left:50%;
+            margin-left:-5px;
+            margin-top:-5px;
+            border-radius:50%;
+            background:rgba(0,0,0,0.6);
+            visibility: hidden;
+            /*不能用display:none 和 block 因为不能加动画*/
+            pointer-events: none;
+            /*让用户点不到circle*/
+            transition: all 0.5s;
+        }
+        .button1 > .circle.active{
+            transform: scale(10);
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="buttons">
+        <button id="button1" class="button1">
+            按钮
+            <span id="circle" class="circle"></span>
+        </button>
+    </div>
+    <script>
+        button1.onclick=function(){
+            circle.classList.add('active')
+        }
+        button1.querySelector('.circle').addEventListener('transitionend',function(){
+            circle.classList.remove('active')
+        })
+    </script>
+</body>
+</html>
